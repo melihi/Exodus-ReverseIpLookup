@@ -9,7 +9,7 @@ Bing
 HackerTarget
 ViewDns.info
 ```
-### usage
+### Usage
 ```
 $ go run . --help
 
