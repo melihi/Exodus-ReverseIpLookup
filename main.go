@@ -41,7 +41,7 @@ ___________                .___
 	viewDnsApiKey := flag.String("viewDns", "", "ViewDns api key .")
 	spyseApiKey := flag.String("spyse", "", "Spyse api key .")
 	verboseMode := flag.Bool("v", false, "Enable verbose mode")
-	outpuFile := flag.String("o", "-", "Enable verbose mode")
+	outpuFile := flag.String("o", "-", "Enable output file path")
 	flag.Parse()
 	if *ipAdress == "" {
 		panic("Ip address required !")
