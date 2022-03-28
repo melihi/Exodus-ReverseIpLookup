@@ -43,7 +43,9 @@ ___________                .___
 	verboseMode := flag.Bool("v", false, "Enable verbose mode")
 	outpuFile := flag.String("o", "-", "Enable verbose mode")
 	flag.Parse()
-
+	if *ipAdress == "" {
+		panic("Ip address required !")
+	}
 	dt := time.Now()
 	color.Yellow("[>] Target ip : %v\n", *ipAdress)
 	//Format MM-DD-YYYY hh:mm:ss
