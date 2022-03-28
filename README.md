@@ -1,4 +1,4 @@
-![](https://github.com/melihi/Exodus-ReverseIpLookup/blob/main/demo.gif?raw=true)
+![](https://github.com/melihi/Exodus-ReverseIpLookup/blob/main/DemoExodus.gif?raw=true)
 # Exodus 
 Reverse ip lookup tool written with go .
 
