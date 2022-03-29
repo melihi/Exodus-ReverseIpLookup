@@ -26,7 +26,7 @@ Usage of Exodus.exe:
   -ip string
         Ip adress of target .
   -o string
-        Enable verbose mode (default "-")
+        Specify output file path (default "-")
   -spyse string
         Spyse api key .
   -v    Enable verbose mode
