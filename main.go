@@ -169,7 +169,7 @@ func hackertargetCralw(ip string, wg *sync.WaitGroup) {
 	//parse line by line multiline string
 	scanner := bufio.NewScanner(strings.NewReader(data))
 	for scanner.Scan() {
-		hosts = append(hosts, scanner.Text()+"hackertargetr")
+		hosts = append(hosts, scanner.Text())
 	}
 
 }
