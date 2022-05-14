@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"regexp"
@@ -23,9 +24,6 @@ import (
 var hosts []string
 
 func main() {
-	var wg sync.WaitGroup
-
-	wg.Add(4)
 
 	color.Green(`
 ___________                .___            
@@ -42,33 +40,76 @@ ___________                .___
 	spyseApiKey := flag.String("spyse", "", "Spyse api key .")
 	verboseMode := flag.Bool("v", false, "Enable verbose mode")
 	outpuFile := flag.String("o", "-", "Specify output file path")
+	checkIp := flag.Bool("c", false, "Compare ip address and remove not matched domains")
 	flag.Parse()
 	if *ipAdress == "" {
 		panic("Ip address required !")
 	}
+	var wg sync.WaitGroup
+	//wg.Add(4)
 	dt := time.Now()
 	color.Yellow("[>] Target ip : %v\n", *ipAdress)
 	//Format MM-DD-YYYY hh:mm:ss
 	color.Yellow("[>] Start     : %v\n\n", dt.Format(time.UnixDate))
-
+	wg.Add(1)
 	go bingCrawl(*ipAdress, &wg)
 
-	if viewDnsApiKey != nil {
+	if *viewDnsApiKey != "" {
+		wg.Add(1)
 		go viewDnsCrawl(*ipAdress, *viewDnsApiKey, &wg)
 
 	}
-	if spyseApiKey != nil {
+	if *spyseApiKey != "" {
+		wg.Add(1)
 		go spyseCralw(*ipAdress, *spyseApiKey, &wg)
 
 	}
+	wg.Add(1)
 	go hackertargetCralw(*ipAdress, &wg)
 	wg.Wait()
-
-	finish(*verboseMode, *outpuFile)
-}
-
-func finish(verb bool, out string) {
+	//remove duplicate hosts
 	removeDup()
+
+	//check given ip and host ip
+	if *checkIp {
+		checkData(*ipAdress, *verboseMode)
+	}
+	printOut(*verboseMode, *outpuFile)
+}
+func checkData(ipAddr string, verbose bool) {
+	color.Yellow("[?]IP checking ...")
+	var falsePositives int = 0
+	//for prevent index out of bound
+	var lenHosts int = len(hosts)
+	for i := 0; i < lenHosts; i++ {
+		ips, err := net.LookupIP(hosts[i])
+
+		if err != nil || ipAddr != ips[0].String() {
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Could not get IPs: %v\n", err)
+			}
+			if verbose && err == nil {
+
+				color.Red("%s:%v\n", hosts[i], ips[0])
+
+			}
+			//delete incorrct host
+			hosts[i] = hosts[len(hosts)-1]
+			hosts[len(hosts)-1] = ""
+			hosts = hosts[:len(hosts)-1]
+			falsePositives++
+			lenHosts = len(hosts)
+		} else {
+			if verbose {
+				color.Green("%s:%v\n", hosts[i], ips[0])
+			}
+
+		}
+	}
+	color.Green("[+]Founded false positives: %d", falsePositives)
+}
+func printOut(verb bool, out string) {
+
 	color.Green("[+] Captured hosts : %d\n", len(hosts))
 	dt := time.Now()
 	color.Yellow("\n[>] Finish     : %v", dt.Format(time.UnixDate))
