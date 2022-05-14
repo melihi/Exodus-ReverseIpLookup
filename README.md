@@ -51,14 +51,16 @@ ___________                .___
 
 Reverse ip lookup tool by Melih Isbilen | ציאת מצרים v1.0 | github.com/melihi
 Usage of Exodus.exe:
+  -c	Compare ip address and remove not matched domains
   -ip string
-        Ip adress of target .
+    	Ip adress of target .
   -o string
-        Specify output file path (default "-")
+    	Specify output file path (default "-")
   -spyse string
-        Spyse api key .
-  -v    Enable verbose mode
+    	Spyse api key .
+  -v	Enable verbose mode
   -viewDns string
-        ViewDns api key .
+    	ViewDns api key .
+
 
 ```
